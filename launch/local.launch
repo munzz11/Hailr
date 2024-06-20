@@ -1,0 +1,10 @@
+<launch>
+    <!-- Launch the garmin_cortex_driver node -->
+    <node pkg="garmin_cortex_driver" type="garmin_cortex" name="garmin_cortex_node" output="screen" />
+
+    <!-- Launch the rosbridge_websocket node -->
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
+
+    <node pkg="hailr" type="http.sh" name="http_server" output="screen" />
+</launch>
+
