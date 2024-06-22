@@ -1,7 +1,8 @@
 <launch>
     <!-- Launch the garmin_cortex_driver node -->
-    <node pkg="garmin_cortex_driver" type="garmin_cortex" name="garmin_cortex" output="screen" />
-   
+    <node pkg="garmin_cortex_driver" type="garmin_cortex" name="garmin_cortex" output="screen">
+       <!-- Diagnostics -->
+    </node> 
     <!-- Define a parameter for the port number -->
     <arg name="port" default="9003" />
 
