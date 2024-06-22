@@ -1,0 +1,13 @@
+<launch>
+    <!-- Launch the garmin_cortex_driver node -->
+    <node pkg="garmin_cortex_driver" type="garmin_cortex" name="garmin_cortex" output="screen" />
+   
+    <!-- Define a parameter for the port number -->
+    <arg name="port" default="9003" />
+
+    <!-- Launch the rosbridge_websocket node with the specified port -->
+    <node pkg="rosbridge_server" type="rosbridge_websocket" name="rosbridge_websocket" output="screen">
+        <param name="port" value="$(arg port)" />
+    </node>
+
+</launch>
