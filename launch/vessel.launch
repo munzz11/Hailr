@@ -1,8 +1,8 @@
 <launch>
     <!-- Launch the garmin_cortex_driver node -->
     <node pkg="garmin_cortex_driver" type="garmin_cortex" name="garmin_cortex" output="screen">
-       <!-- Diagnostics -->
-    </node> 
+    </node>
+
     <!-- Define a parameter for the port number -->
     <arg name="port" default="9003" />
 
@@ -11,4 +11,8 @@
         <param name="port" value="$(arg port)" />
     </node>
 
+    <!-- Launch the marine_radio_tools send_text_service node -->
+    <node pkg="marine_radio_tools" type="send_text_service" name="send_text_service" output="screen">
+    </node>
 </launch>
+
