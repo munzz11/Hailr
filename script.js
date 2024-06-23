@@ -4,7 +4,7 @@ var audioContext = new AudioContext();
 
 // Connect to ROSBridge server
 var ros = new ROSLIB.Ros({
-    url: 'ws://192.168.8.169:9090'  // Change URL as per your ROSBridge server configuration
+	url: 'ws://10.8.0.8:9003'  // Change URL as per your ROSBridge server configuration
   });
 
 document.addEventListener('DOMContentLoaded', function () {
