@@ -7,6 +7,19 @@ var ros = new ROSLIB.Ros({
 	url: 'ws://10.8.0.8:9003'  // Change URL as per your ROSBridge server configuration
   });
 
+ros.on('connection', function() {
+    console.log('Connected to websocket server.');
+});
+
+ros.on('error', function(error) {
+    console.log('Error connecting to websocket server: ', error);
+});
+
+ros.on('close', function() {
+    console.log('Connection to websocket server closed.');
+});
+
+
 document.addEventListener('DOMContentLoaded', function () {
   var volume = document.getElementById('volume-range');
   var pitch = document.getElementById('pitch-range');
@@ -96,6 +109,36 @@ document.addEventListener('DOMContentLoaded', function () {
             // Handle any errors
         });
 
+
+   document.getElementById('setchannel').addEventListener('click', function () {
+        // Create a ROS Service client
+        var serviceClient = new ROSLIB.Service({
+            ros: ros,
+            name: '/send_text_service/transmit_text ',
+            serviceType: 'marine_radio_msgs/TransmitText'
+        });
+
+        var channelId = Number(document.getElementById('channelId').value);
+        var message = document.getElementById('message').value;
+
+
+        console.log(channelId);
+	console.log(message);
+        // Create a Service Request
+        var request = new ROSLIB.ServiceRequest({
+            channel_id: channelId,
+	    message: message
+        });
+
+        // Call the ROS Service
+        serviceClient.callService(request, function (response) {
+            console.log('Service 1 Response:', response);
+            // Handle the response as needed
+        }, function (error) {
+            console.error('Service 1 Error:', error);
+            // Handle any errors
+        });
+
 });
 
 
@@ -168,7 +211,8 @@ pitch.addEventListener('input', function () {
 var audioListener = new ROSLIB.Topic({
   ros: ros,
   name: '/garmin_cortex/audio',
-  messageType: 'marine_radio_msgs/AudioDataStamped'
+  messageType: 'marine_radio_msgs/AudioDataStamped',
+  reconnect_on_close: true
 });
 
 
@@ -193,7 +237,7 @@ function playAudio(audioData, audioParams) {
 
   // Add audio data to the queue
   audioQueue.push(audioArray);
-
+  //console.log(audioArray);
   // Start playing if not already playing
   if (!isPlaying) {
     playFromQueue(audioParams);
