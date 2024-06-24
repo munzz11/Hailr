@@ -3,9 +3,13 @@ var AudioContext = window.AudioContext || window.webkitAudioContext;
 var audioContext = new AudioContext();
 
 // Connect to ROSBridge server
-var ros = new ROSLIB.Ros({
-	url: 'ws://10.8.0.8:9003'  // Change URL as per your ROSBridge server configuration
-  });
+var ros = new ROSLIB.Ros();
+
+function connectRos() {
+   ros.connect('ws://10.8.0.8:9003');
+}
+
+setTimeout(connectRos, 2000);
 
 ros.on('connection', function() {
     console.log('Connected to websocket server.');
@@ -110,24 +114,30 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
 
-   document.getElementById('setchannel').addEventListener('click', function () {
+   });
+
+     // Button Click Event Handler for VHF calling channel
+    document.getElementById('vhftansmitbutton').addEventListener('click', function () {
         // Create a ROS Service client
         var serviceClient = new ROSLIB.Service({
             ros: ros,
-            name: '/send_text_service/transmit_text ',
+            name: '/send_text_service/transmit_text',
             serviceType: 'marine_radio_msgs/TransmitText'
         });
 
-        var channelId = Number(document.getElementById('channelId').value);
-        var message = document.getElementById('message').value;
+	// Get input values
+       var transmitchannel = Number(document.getElementById('vhfchannel').value);
+       var transmitmessage = document.getElementById('vhfmessage').value;
 
 
-        console.log(channelId);
-	console.log(message);
+        console.log('Transmitting');
+	console.log(transmitchannel);
+	console.log(transmitmessage);
+	
         // Create a Service Request
         var request = new ROSLIB.ServiceRequest({
-            channel_id: channelId,
-	    message: message
+            channel_id: transmitchannel,
+	    message: transmitmessage
         });
 
         // Call the ROS Service
@@ -139,9 +149,8 @@ document.addEventListener('DOMContentLoaded', function () {
             // Handle any errors
         });
 
-});
 
-
+   });
 
 // Slider event handler for changing volume
 volume.addEventListener('input', function () {
